@@ -25,6 +25,10 @@ $appointment-height: 11rem;
     display: flex;
   }
 
+  .appointment:last-of-type .appointment__add {
+    display: none;
+  }
+
   &__separator {
     border: 0;
     border-bottom: 1px solid darken($white, 5%);
