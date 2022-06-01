@@ -1,4 +1,4 @@
-export const getAppointmentsForDay = (state, day) => {
+export default function getAppointmentsForDay  (state, day) {
   const selectedDay = state.days.find((item) => item.name === day)
   if (!selectedDay) {
     return []
