@@ -19,6 +19,26 @@ function getAppointmentsForDay  (state, day) {
   return null
 }
 
+function getInterviewersForDay  (state, day) {
+  const appointments = getAppointmentsForDay(state, day)
+  const interviewerIds = []
+  for (const appointment of appointments) {
+    if (appointment.interview) {
+      interviewerIds.push(appointment.interview.interviewer)
+    } else {
+      interviewerIds.push(null)
+    }
+  } 
+
+  const interviewers = interviewerIds.map((id) => {
+    if (id) {
+      return state.interviewers[id]
+    } else {
+      return null
+    }
+  })
+  return interviewers
+}
 
 
-export {getAppointmentsForDay , getInterview }
+export {getAppointmentsForDay , getInterview, getInterviewersForDay}
