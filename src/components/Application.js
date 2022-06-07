@@ -36,22 +36,48 @@ export default function Application(props) {
     })
   },[])
 
+  function bookInterview(id, interview) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    return setState({
+      ...state, appointments
+    })
+  }
+
   const dailyAppointments = getAppointmentsForDay(state, state.day);
-  const dailyInterviewers = getInterviewersForDay(state, state.day)
+  const dailyInterviewers = getInterviewersForDay(state, state.day);
+  const selectedDay = state.days.find((day) => day.name === state.day)
+  let availableInterviewers = []
+  if (selectedDay) {
+    availableInterviewers = selectedDay.interviewers.map((interviewerId) => {
+      return state.interviewers[interviewerId]
+    })
+  }
+
+  const interviewers = Object.keys(state.interviewers).map((id) => {
+    return state.interviewers[id]
+  })
   const appointment = dailyAppointments.map((appointment, index) => {
     const interview = getInterview(state, appointment.interview);
     if (interview) {
+
       interview.interviewers = dailyInterviewers[index]
     }
     return (
-
       <Appointment 
         key={appointment.id}
         id={appointment.id}
         time={appointment.time}
         interview={interview}
-        interviewers={state.interviewers}
-        // dailyInterviewer={dailyInterviewers[index]}
+        interviewers={interviewers}
+        bookInterview={bookInterview}
+        availableInterviewers={availableInterviewers}
       />
     )
   }) 

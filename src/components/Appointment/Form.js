@@ -7,20 +7,27 @@ export default function Form(props) {
   const [student, setStudent] = useState(props.student || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
 
+  const {
+    cancel,
+    save,
+    availableInterviewers
+  } = props
+
+
   const reset = () => {
-      setInterviewer(null)
-      setStudent("")
-      // return undefined
+    setInterviewer(null)
+    setStudent("")
+    // return undefined
   }
 
-  const cancel = () => {
+  const onSave = () => {
+    save(student, interviewer)
+  }
+
+  const onCancel = () => {
     reset()
-    props.onCancel()
+    cancel()
   } 
-
-
-
-
 
   return (
     <main className="appointment__card appointment__card--create">
@@ -36,19 +43,16 @@ export default function Form(props) {
       />
      
     </form>
-    <InterviewerList
-      
-      interviewers={props.interviewers}
-      
+    <InterviewerList      
+      interviewers={availableInterviewers}      
       value={interviewer}
-      onChange={setInterviewer}
-      
+      onChange={setInterviewer}      
     />
   </section>
   <section className="appointment__card-right">
     <section className="appointment__actions">
-      <Button danger onClick={cancel}>Cancel</Button>
-      <Button confirm onClick={props.onSave}>Save</Button>
+      <Button danger onClick={onCancel}>Cancel</Button>
+      <Button confirm onClick={onSave}>Save</Button>
     </section>
   </section>
 </main>
