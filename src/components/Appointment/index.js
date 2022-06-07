@@ -32,6 +32,11 @@ export default function Appointment(props) {
     transition(SHOW)
   }
 
+  function cancelInterview(){
+    bookInterview(id, null)
+    transition(EMPTY)
+  }
+
   return (
     <article className="appointment">
       <Header time={time} />
@@ -40,6 +45,7 @@ export default function Appointment(props) {
         <Show
           student={interview.student}
           interviewer={interview.interviewer}
+          cancelInterview={cancelInterview}
         />
       )}
       {mode === CREATE && 

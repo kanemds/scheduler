@@ -5,8 +5,11 @@ export default function Show(props) {
     student,
     interviewer,
     onEdit,
-    onDelete
+    cancelInterview
   } = props
+
+
+
   return (
     <main className="appointment__card appointment__card--show">
   <section className="appointment__card-left">
@@ -30,7 +33,7 @@ export default function Show(props) {
         className="appointment__actions-button"
         src="images/trash.png"
         alt="Delete"
-        onClick={onDelete}
+        onClick={cancelInterview}
       />
     </section>
   </section>
