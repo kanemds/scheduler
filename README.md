@@ -22,3 +22,5 @@ npm test
 npm run storybook
 ```
 !["appointment added"](https://github.com/kanemds/scheduler/blob/master/docs/added.png)
+!["creating appointment"](https://github.com/kanemds/scheduler/blob/master/docs/create.png)
+!["saving appointment"](https://github.com/kanemds/scheduler/blob/master/docs/saving.png)
