@@ -21,3 +21,4 @@ npm test
 ```sh
 npm run storybook
 ```
+!["appointment added"](https://github.com/kanemds/scheduler/blob/master/docs/added.png)
