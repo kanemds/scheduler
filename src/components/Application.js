@@ -1,55 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "components/Appointment" 
-import axios from "axios"
 import { getAppointmentsForDay, getInterview, getInterviewersForDay }from "../helpers/selectors";
+import useApplicationData from "hooks/useApplicationData";
 
 
+// state,
+// setDay,
+// bookInterview,
+// cancelInterview
 
 export default function Application(props) {
-  const [state, setState] = useState({
-    day: "Monday",
-    days: [],
-    appointments: {},
-    interviewers: {}
-  });
-
-
- 
-  const setDay = day => setState({ ...state, day });
-
-  useEffect(()=>{
-    Promise.all([
-      axios.get('http://localhost:8001/api/days'),
-      axios.get('http://localhost:8001/api/appointments'),
-      axios.get('http://localhost:8001/api/interviewers')
-    ])
-    .then((all) => {
-      setState(prev => ({
-        ...prev,
-        days:all[0].data,
-        appointments:all[1].data,
-        interviewers:all[2].data
-      }))
-    })
-  },[])
-
-  function bookInterview(id, interview) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-    return setState({
-      ...state, appointments
-    })
-  }
-
+  const {
+    state,
+    setDay,
+    bookInterview,
+    cancelInterview,
+  } = useApplicationData();
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   const dailyInterviewers = getInterviewersForDay(state, state.day);
@@ -78,6 +47,7 @@ export default function Application(props) {
         interview={interview}
         interviewers={interviewers}
         bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
         availableInterviewers={availableInterviewers}
       />
     )
@@ -97,6 +67,7 @@ export default function Application(props) {
         { state.days && (<DayList
           value={state.days}
           selected={state.day}
+          spots={state.spots}
           onChange={setDay}
         /> )}
         </nav>

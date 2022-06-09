@@ -6,14 +6,20 @@ import Empty from './Empty'
 import useVisualMode from '../../hooks/useVisualMode'
 import Form from './Form'
 import Confirm from'./Confirm'
+import Error from './Error'
+import Status from './Status'
 
-
+// await somepromisefunc().catch()
 export default function Appointment(props) {
   const EMPTY = "EMPTY"
   const SHOW = "SHOW"
   const CREATE = "CREATE"
   const CONFIRM = "CONFIRM"
   const EDIT = "EDIT"
+  const SAVING = "SAVING"
+  const ERROR_SAVE = "ERROR_SAVE"
+  const ERROR_DELETE = "ERROR_DELETE"
+  const DELETING = "DELETING"
 
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
@@ -24,6 +30,7 @@ export default function Appointment(props) {
     time,
     interview,
     bookInterview,
+    cancelInterview,
     availableInterviewers
   } = props
 
@@ -32,14 +39,20 @@ export default function Appointment(props) {
       student: name,
       interviewer
     };
+    transition(SAVING);
+
     bookInterview(id, interview)
-    transition(SHOW)
+      .then(() => transition(SHOW))
+      .catch(error => transition(ERROR_SAVE, true));
   }
 
-  function cancelInterview(){
-    bookInterview(id, null)
-    transition(EMPTY)
-  }
+  function destroy() {
+    transition(DELETING, true);
+    
+    cancelInterview(id)
+     .then(() => transition(EMPTY))
+     .catch(error => transition(ERROR_DELETE, true));
+  } 
 
   return (
     <article className="appointment">
@@ -64,18 +77,30 @@ export default function Appointment(props) {
       {mode === CONFIRM && 
         <Confirm 
           onCancel={back} 
-          cancelInterview={cancelInterview}
+          cancelInterview={destroy}
         />
         }
       {mode === EDIT && 
         <Form 
           student={interview.student}
-          interviewer={interview.interviewer.id}
+          interviewer={interview && interview.interviewer && interview.interviewer.id}
           cancel={back} 
           save={save}
           bookInterview={bookInterview}
           availableInterviewers={availableInterviewers} 
         />}
+        {mode === ERROR_SAVE &&
+          <Error onClose={back} />
+        }
+        {mode === ERROR_DELETE &&
+          <Error onClose={back} />
+        }        
+        {mode === DELETING &&
+          <Status message={DELETING} />
+        }  
+        {mode === SAVING &&
+          <Status message={SAVING} />
+        }                
     </article>
 
     )
