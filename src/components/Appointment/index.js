@@ -69,7 +69,7 @@ export default function Appointment(props) {
       {mode === CREATE && 
         <Form 
           cancel={back} 
-          save={save}
+          onSave={save}
           bookInterview={bookInterview}
           availableInterviewers={availableInterviewers}          
         />
@@ -85,7 +85,7 @@ export default function Appointment(props) {
           student={interview.student}
           interviewer={interview && interview.interviewer && interview.interviewer.id}
           cancel={back} 
-          save={save}
+          onSave={save}
           bookInterview={bookInterview}
           availableInterviewers={availableInterviewers} 
         />}
